@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>320</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>488</width>
+      <height>349</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabPosition">
+        <enum>QTabWidget::North</enum>
+       </property>
+       <property name="tabShape">
+        <enum>QTabWidget::Rounded</enum>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>8</width>
+         <height>8</height>
+        </size>
+       </property>
+       <property name="elideMode">
+        <enum>Qt::ElideLeft</enum>
+       </property>
+       <widget class="QWidget" name="polarisation_ellipse_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>480</width>
+          <height>320</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>480</width>
+          <height>320</height>
+         </size>
+        </property>
+        <attribute name="title">
+         <string>Polarisation Ellipse</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="stokes_parameters_tab">
+        <attribute name="title">
+         <string>Stokes Parameters</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="poincare_sphere">
+        <attribute name="title">
+         <string>Poincaré Sphere</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="status_tab">
+        <attribute name="title">
+         <string>Status</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="settings_tab">
+        <attribute name="title">
+         <string>Settings</string>
+        </attribute>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
