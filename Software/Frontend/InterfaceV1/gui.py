@@ -8,9 +8,9 @@ from calculate import Calculator
 
 
 class Interface(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, path):
         super(Interface, self).__init__()  # Call the inherited classes __init__ method
-        uic.loadUi('gui.ui', self)  # Load the .ui file
+        uic.loadUi(path, self)  # Load the .ui file
         self.setFixedSize(self.size())  # Disables window resizing
         self.setWindowTitle("Real-Time Portable Polarimeter")
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)  # Used to hide window frame
