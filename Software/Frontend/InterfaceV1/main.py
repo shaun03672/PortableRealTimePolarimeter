@@ -7,6 +7,7 @@ class Main:
     def __init__(self, argv):
         app = QtWidgets.QApplication(argv)
         window = Interface()
+        window.resize(800, 480)
         window.show()
         sys.exit(app.exec_())
 
