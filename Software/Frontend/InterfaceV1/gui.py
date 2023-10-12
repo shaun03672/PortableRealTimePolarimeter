@@ -5,16 +5,28 @@ from PyQt5 import QtWidgets, QtCore, uic
 from pyqtgraph.widgets import PlotWidget
 from pyqtgraph import ViewBox, AxisItem, mkPen, BarGraphItem
 from calculate import Calculator
+from sys import platform
 
 
 class Interface(QtWidgets.QMainWindow):
-    def __init__(self, path):
+
+    path_linux = "/home/polarimeter/Documents/PortableRealTimePolarimeter/Software/Frontend/InterfaceV1/gui.ui"
+    path_windows = "gui.ui"
+    linux_flag = False
+    def __init__(self):
         super(Interface, self).__init__()  # Call the inherited classes __init__ method
+        if platform == "win32":
+            path = self.path_windows
+        else:
+            self.linux_flag = True
+            path = self.path_linux
         uic.loadUi(path, self)  # Load the .ui file
         self.setFixedSize(self.size())  # Disables window resizing
         self.setWindowTitle("Real-Time Portable Polarimeter")
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)  # Used to hide window frame
         self.move(0, 0)  # Move frame to top left of screen
+        if self.linux_flag:
+            self.showMaximized()
 
         self.polarisation_ellipse_widget.disableAutoRange(ViewBox.XYAxes)
         self.polarisation_ellipse_widget.setRange(yRange=(-1, 1), xRange=(-1, 1))

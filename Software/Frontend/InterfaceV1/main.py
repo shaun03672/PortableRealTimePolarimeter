@@ -4,12 +4,9 @@ from gui import Interface
 
 class Main:
 
-    # path = "/home/polarimeter/Documents/PortableRealTimePolarimeter/Software/Frontend/InterfaceV1/gui.ui"
-    path = "gui.ui"
-
     def __init__(self, argv):
         app = QtWidgets.QApplication(argv)
-        window = Interface(self.path)
+        window = Interface()
         window.show()
         sys.exit(app.exec_())
 
