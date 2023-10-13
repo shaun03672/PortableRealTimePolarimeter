@@ -12,7 +12,6 @@ class Calculator():
         self.S1 = 0.0
         self.S2 = 0.0
         self.S3 = 0.0
-        self.generate_random_polarisation()
 
     def generate_random_polarisation(self):
         S1 = np.random.random() * 2 - 1  # random number in range [-1, 1)

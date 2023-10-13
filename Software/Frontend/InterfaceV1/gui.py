@@ -1,9 +1,10 @@
 import time
 from typing import Union
 
+import pyqtgraph
 from PyQt5 import QtWidgets, QtCore, uic
 from pyqtgraph.widgets import PlotWidget
-from pyqtgraph import ViewBox, AxisItem, mkPen, BarGraphItem
+from pyqtgraph import ViewBox, AxisItem, mkPen, BarGraphItem, opengl
 from calculate import Calculator
 from sys import platform
 
@@ -35,28 +36,27 @@ class Interface(QtWidgets.QMainWindow):
 
         self.polarisation_ellipse_widget.disableAutoRange(ViewBox.XYAxes)
         self.polarisation_ellipse_widget.setRange(yRange=(-1, 1), xRange=(-1, 1))
-        # self.set_widget_titles(
-        #     self.polarisation_ellipse_widget,
-        #     left_text="Ey",
-        #     left_units=None,
-        #     bottom_text="Ex",
-        #     bottom_units=None
-        # )
+        # self.set_widget_titles(self.polarisation_ellipse_widget, left_text="2Ey0", bottom_text="2Ex0")
         self.polarisation_ellipse_plot = self.polarisation_ellipse_widget.plot(pen=mkPen(color='red', width=3))
-        self.polarisation_ellipse_widget.getPlotItem().layout.setContentsMargins(0, 0, 0, 15)
+        self.polarisation_ellipse_widget.getPlotItem().layout.setContentsMargins(0, 0, 0, 30)
         self.polarisation_ellipse_widget.showGrid(x=True, y=True, alpha=0.4)
         self.polarisation_ellipse_widget.setBackground('w')
+        self.polarisation_ellipse_widget.hideButtons()
         black_pen = mkPen(color='black', width=4)
         self.polarisation_ellipse_widget.getAxis('bottom').setTextPen(black_pen)
         self.polarisation_ellipse_widget.getAxis('left').setTextPen(black_pen)
         self.polarisation_ellipse_widget.setMouseEnabled(x=False, y=False)
 
         self.calc = Calculator(256)
+        self.calc.generate_random_polarisation()
+        self.update_plots()
 
         self.stokes_parameters_plot = self.stokes_parameters_widget.plot()
+        self.stokes_parameters_widget.getPlotItem().layout.setContentsMargins(0, 0, 0, 30)
         self.stokes_parameters_widget.setMouseEnabled(x=False, y=False)
         self.stokes_parameters_widget.setRange(yRange=(-1, 1))
         self.stokes_parameters_widget.showGrid(x=True, y=True, alpha=0.4)
+        self.stokes_parameters_widget.hideButtons()
         self.stokes_parameters_widget.setBackground('w')
         self.stokes_parameters_widget.getAxis('bottom').setTextPen(black_pen)
         self.stokes_parameters_widget.getAxis('left').setTextPen(black_pen)
@@ -68,7 +68,14 @@ class Interface(QtWidgets.QMainWindow):
         self.stokes_bar_graph = BarGraphItem(x=stokes_x, height=stokes_y, width=0.8, brush='r')
         self.stokes_parameters_widget.addItem(self.stokes_bar_graph)
 
-        self.update_plots()
+        # axis = opengl.GLAxisItem()
+        # self.poincare_sphere_opengl_widget.addItem(axis)
+        grid = opengl.GLGridItem()
+        grid.setColor("#00000040")
+        self.poincare_sphere_opengl_widget.addItem(grid)
+
+        self.poincare_sphere_opengl_widget.setBackgroundColor('w')
+
 
     def generate_random_polarisation(self):
         self.calc.generate_random_polarisation()
