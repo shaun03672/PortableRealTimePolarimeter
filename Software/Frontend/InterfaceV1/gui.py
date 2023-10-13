@@ -28,6 +28,11 @@ class Interface(QtWidgets.QMainWindow):
         if self.linux_flag:
             self.showMaximized()
 
+        self.rand_stokes_button_xyplot.clicked.connect(self.generate_random_polarisation)
+        self.rand_stokes_button_barchart.clicked.connect(self.generate_random_polarisation)
+        self.rand_stokes_button_xyzplot.clicked.connect(self.generate_random_polarisation)
+        self.tabWidget.currentChanged.connect(self.update_plots)
+
         self.polarisation_ellipse_widget.disableAutoRange(ViewBox.XYAxes)
         self.polarisation_ellipse_widget.setRange(yRange=(-1, 1), xRange=(-1, 1))
         # self.set_widget_titles(
@@ -37,7 +42,7 @@ class Interface(QtWidgets.QMainWindow):
         #     bottom_text="Ex",
         #     bottom_units=None
         # )
-        self.polarisation_ellipse_plot = self.polarisation_ellipse_widget.plot(**{'pen': 'r'})
+        self.polarisation_ellipse_plot = self.polarisation_ellipse_widget.plot(pen=mkPen(color='red', width=3))
         self.polarisation_ellipse_widget.getPlotItem().layout.setContentsMargins(0, 0, 0, 15)
         self.polarisation_ellipse_widget.showGrid(x=True, y=True, alpha=0.4)
         self.polarisation_ellipse_widget.setBackground('w')
@@ -46,10 +51,7 @@ class Interface(QtWidgets.QMainWindow):
         self.polarisation_ellipse_widget.getAxis('left').setTextPen(black_pen)
         self.polarisation_ellipse_widget.setMouseEnabled(x=False, y=False)
 
-        calc = Calculator()
-        x = calc.get_polarisation_ellipse_x_data()
-        y = calc.get_polarisation_ellipse_y_data()
-        self.polarisation_ellipse_plot.setData(x, y)  # Used to update plot in realtime
+        self.calc = Calculator(256)
 
         self.stokes_parameters_plot = self.stokes_parameters_widget.plot()
         self.stokes_parameters_widget.setMouseEnabled(x=False, y=False)
@@ -63,12 +65,48 @@ class Interface(QtWidgets.QMainWindow):
 
         stokes_x = [1, 2, 3, 4]
         stokes_y = [0, 0, 0, 0]
-        bar_graph = BarGraphItem(x=stokes_x, height=stokes_y, width=0.8, brush='r')
-        self.stokes_parameters_widget.addItem(bar_graph)
+        self.stokes_bar_graph = BarGraphItem(x=stokes_x, height=stokes_y, width=0.8, brush='r')
+        self.stokes_parameters_widget.addItem(self.stokes_bar_graph)
 
-        stokes_y = calc.get_stokes_params()
-        bar_graph.setOpts(height=stokes_y)  # Used to update bar graph in realtime
+        self.update_plots()
 
+    def generate_random_polarisation(self):
+        self.calc.generate_random_polarisation()
+        self.update_plots()
+
+    def update_plots(self):
+
+        tab_index = self.tabWidget.currentIndex()
+        if 0 <= tab_index <= 2:
+            S0, S1, S2, S3 = self.calc.get_stokes_params()
+            DOP = self.calc.get_dop()
+
+            if tab_index == 0:
+                self.s0_value_xyplot.setText(f'{S0:+.5f}')
+                self.s1_value_xyplot.setText(f'{S1:+.5f}')
+                self.s2_value_xyplot.setText(f'{S2:+.5f}')
+                self.s3_value_xyplot.setText(f'{S3:+.5f}')
+                self.dop_value_xyplot.setText(f'{DOP * 100:.2f}%')
+
+                x, y = self.calc.get_polarisation_ellipse_xy_data()
+                self.polarisation_ellipse_plot.setData(x, y)  # Used to update plot in realtime
+
+            elif tab_index == 1:
+                self.s0_value_barchart.setText(f'{S0:+.5f}')
+                self.s1_value_barchart.setText(f'{S1:+.5f}')
+                self.s2_value_barchart.setText(f'{S2:+.5f}')
+                self.s3_value_barchart.setText(f'{S3:+.5f}')
+                self.dop_value_barchart.setText(f'{DOP * 100:.2f}%')
+
+                stokes_y = self.calc.get_stokes_params()
+                self.stokes_bar_graph.setOpts(height=stokes_y)  # Used to update bar graph in realtime
+
+            else:
+                self.s0_value_xyzplot.setText(f'{S0:+.5f}')
+                self.s1_value_xyzplot.setText(f'{S1:+.5f}')
+                self.s2_value_xyzplot.setText(f'{S2:+.5f}')
+                self.s3_value_xyzplot.setText(f'{S3:+.5f}')
+                self.dop_value_xyzplot.setText(f'{DOP * 100:.2f}%')
 
     @staticmethod
     def set_widget_titles(
