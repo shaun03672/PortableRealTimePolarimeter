@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-class HallSensor:
+class DRV5011ADLPGM:
     def __init__(self, pin):
         self.pin = pin
         GPIO.setmode(GPIO.BCM)
@@ -26,5 +26,5 @@ class HallSensor:
 
 # Usage
 if __name__ == "__main__":
-    hall_sensor = HallSensor(23)
-    hall_sensor.run()
+    hall_sensor = DRV5011ADLPGM(23)
+    DRV5011ADLPGM.run()
